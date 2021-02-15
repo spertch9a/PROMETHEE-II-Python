@@ -170,31 +170,68 @@ matrix_m4 = matrixafterchange
 matrixX, matrixY = matrix_m1.shape
 
 def stepthree(matrix, ligne) :
-	print('Alternative : {}'.format(ligne))
-	if (ligne != 1):
-		matrix[[0,ligne-1]] = matrix[[ligne-1, 0]]
-	else:
-		pass
+    print('Alternative : {}'.format(ligne))
+    if (ligne != 1):
+       matrix[[0,ligne-1]] = matrix[[ligne-1, 0]]
+    else:
+    	pass
 
-	new_matrix = []
-	reverse_matrix = matrix.transpose()
+    new_matrix = []
+    reverse_matrix = matrix.transpose()
 	
-	for line in reverse_matrix:
-		data = []
-		for i in line[1:]:
-			data.append(line[0]-i)
-		new_matrix.append(data)
-	
-	result_matrix = np.matrix(new_matrix).transpose()
+    for line in reverse_matrix:
+        data = []
+        for i in line[1:]:
+            data.append(line[0]-i)
+        new_matrix.append(data)
+    
+    result_matrix = np.matrix(new_matrix).transpose()
 
-	print(result_matrix)
-
-
-
-stepthree(matrix_m1, 1)
-stepthree(matrix_m2, 2)
-stepthree(matrix_m3, 3)
-stepthree(matrix_m4, 4)
+    print(result_matrix)
+    return result_matrix
 
 
+matrix_m1 = stepthree(matrix_m1, 1)
+matrix_m2 = stepthree(matrix_m2, 2)
+matrix_m3 = stepthree(matrix_m3, 3)
+matrix_m4 = stepthree(matrix_m4, 4)
 
+# add labels for each matrix
+labelsm1 =['m1-m2', 'm1-m3', 'm1-m4']
+labelsm2 =['m2-m1', 'm2-m3', 'm2-m4']
+labelsm3 =['m3-m1', 'm3-m2', 'm3-m4']
+labelsm4 =['m4-m1', 'm4-m2', 'm4-m3']
+#we'll transpose it, add a label to it and retranspose it to make the labels on the left column
+#transpose
+matrix_m1t = np.matrix(matrix_m1).transpose()
+matrix_m2t = np.matrix(matrix_m2).transpose()
+matrix_m3t = np.matrix(matrix_m3).transpose()
+matrix_m4t = np.matrix(matrix_m4).transpose()
+# retranspos
+#m1
+matrix_m1t = np.vstack([labelsm1, matrix_m1t])
+matrix_m1 = np.matrix(matrix_m1t).transpose()
+#m2
+matrix_m2t = np.vstack([labelsm2, matrix_m2t])
+matrix_m2 = np.matrix(matrix_m2t).transpose()
+#m3
+matrix_m3t = np.vstack([labelsm3, matrix_m3t])
+matrix_m3 = np.matrix(matrix_m3t).transpose()
+#m4
+matrix_m4t = np.vstack([labelsm4, matrix_m4t])
+matrix_m4 = np.matrix(matrix_m4t).transpose()
+
+
+
+# Add Labels
+print(matrix_m1, matrix_m2, matrix_m3, matrix_m4)
+
+
+
+#  Concatenation
+mastermatrix = np.vstack([matrix_m1, matrix_m2, matrix_m3, matrix_m4])
+print('#############')
+printmatrix(mastermatrix)
+
+#matrix de contingence
+print(mastermatrix.sum(axis=1))
