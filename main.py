@@ -134,9 +134,9 @@ def calculedifferencenonbeneficial(value,max_colmn, min_colmn):
 print(calculeDiffbeneficial(16,18,4))
 
 def steptwo(entrymatrix) :
-    for i in range(len(entrymatrix)) :  
+    for i in range(len(entrymatrix-2)) :  
     #hna reni f  ligne
-        for j in range(len(entrymatrix[i]) - 2) :  
+        for j in range(len(entrymatrix[i])) :  
             #hna reni f la column
             if j == 0: 
                 entrymatrix[i][j] = calculedifferencenonbeneficial(entrymatrix[i][j],entrymatrix[4][j], entrymatrix[5][j])
@@ -146,6 +146,15 @@ def steptwo(entrymatrix) :
     #hna reni rod la matrice m3Amra
     return entrymatrix            
 
-
-print(steptwo(y))
+#gla3T zouj stoura twala
+matrixaftersteptwo = steptwo(y)[:4][:4]
  
+ #darwek li raha taht 0 nrodha 0 
+def changetozeros(matrix):
+    for i in range(len(matrix)) :  
+        for j in range(len(matrix[i])) :  
+           if matrix[i][j] <0 :
+                matrix[i][j] = 0
+    return matrix 
+
+print(changetozeros(matrixaftersteptwo))
