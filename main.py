@@ -2,6 +2,7 @@
 Authon Oussama FORTAS
 """
 import numpy as np
+from numpy.core.defchararray import array
 print("PROMETHEE 2 METHOD")
 print("#######################################################")
 
@@ -157,6 +158,25 @@ def changetozeros(matrix):
                 matrix[i][j] = 0
     return matrix 
 
+def mult_matrix_vect(matrix, weight):
+    for i in range(len(matrix)) :  
+        for j in range(len(matrix[i])) :  
+            matrix[i][j] = matrix[i][j]* weight[j]
+    return matrix
+
+def aggregate_matrix_avg(matrix):
+    average_line_weight = []
+    
+    for i in range(len(matrix)) :
+        print(len(matrix))
+        sum = 0  
+        for j in range(len(matrix[i])) :
+            sum = sum + matrix[i][j] 
+        print(sum)
+        average_line_weight.append(sum)
+        
+    matrix = np.vstack([matrix.transpose(), average_line_weight])
+    return matrix
 matrixafterchange = changetozeros(matrixaftersteptwo)
 #STEP3 : nahasbou koul wahda w difference m3A lokhrine
 
@@ -231,18 +251,60 @@ print(matrix_m1, matrix_m2, matrix_m3, matrix_m4)
 #  Concatenation
 mastermatrix = np.vstack([matrix_m1, matrix_m2, matrix_m3, matrix_m4])
 print('#############')
-printmatrix(mastermatrix)
-#submatrix to make sum
-submatrixcontingence = mastermatrix[:,1:]
+print(mastermatrix)
+
+
+#submatrix to calculate matrix of oreference
+submastermatrix = mastermatrix[:,1:]
 #changing its type to float (to be able to sum)
-submatrixcontingence1 = submatrixcontingence.astype(np.float)
-#matrix de contingence 
-summ = submatrixcontingence1.sum(axis=1)
-print("SUM")
-print(summ)
-#flip the matix, add row the flip it aggain 
-submatrixcontingence11 = np.matrix(submatrixcontingence1).transpose()
-# retranspos
-#m1
-matrixsummed = np.vstack([submatrixcontingence11, summ])
-print(matrixsummed)
+submastermatrix = submastermatrix.astype(np.float)
+
+# make the matrix readable on loop function using Array
+print('//////////')
+print(submastermatrix)
+
+# arraymatrix = array(submastermatrix)
+# print('----------------')
+# print(arraymatrix)
+
+arraymatrix2 = changetozeros(np.array(submastermatrix))
+
+print(arraymatrix2)
+
+
+weights = [0.35, 0.25, 0.25, 0.15]
+
+new_matrix = mult_matrix_vect(arraymatrix2, weights)
+
+print('****************')
+print(new_matrix)
+# add column aggregate 
+aggregate_matrix = np.matrix(aggregate_matrix_avg(new_matrix)).transpose()
+
+print('^^^^^^^^^^^^^^^^^')
+print(aggregate_matrix)
+
+
+
+
+
+# # Sorted Array
+# sorted_array = aggregate_matrix[np.argsort(aggregate_matrix[:, 4])]
+
+# print('²²²²²²²²²²²²²²²²²')
+# print(sorted_array)
+
+# #submatrix to make sum
+# submatrixcontingence = mastermatrix[:,1:]
+# #changing its type to float (to be able to sum)
+# submatrixcontingence1 = submatrixcontingence.astype(np.float)
+# #matrix de contingence 
+# summ = submatrixcontingence1.sum(axis=1)
+# print("SUM")
+# print(summ)
+# #flip the matix, add row the flip it aggain 
+# submatrixcontingence11 = np.matrix(submatrixcontingence1).transpose()
+# # retranspos
+# #m1
+# matrixsummed = np.vstack([submatrixcontingence11, summ])
+# print(matrixsummed)
