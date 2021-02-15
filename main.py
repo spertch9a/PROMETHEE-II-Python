@@ -123,12 +123,15 @@ print(y)
 
 
 
-def calculeDiffbeneficial(value, max_colmn,min_colomn):
-    return ((value-min_colmn)/(max_colmn-min_colomn))
+def calculeDiffbeneficial(value, max_colmn,min_colmn):
+    return ((value - min_colmn) / (max_colmn - min_colmn))
     
-def calculedifferencenonbeneficial(value,max_colmn, min_colomn):
-    return ((max_colmn-value)/(max_colmn-min_colomn))
+def calculedifferencenonbeneficial(value,max_colmn, min_colmn):
+    return ((max_colmn - value) / (max_colmn - min_colmn))
 
+
+
+print(calculeDiffbeneficial(16,18,4))
 
 def steptwo(entrymatrix) :
     for i in range(len(entrymatrix)) :  
@@ -136,32 +139,13 @@ def steptwo(entrymatrix) :
         for j in range(len(entrymatrix[i]) - 2) :  
             #hna reni f la column
             if j == 0: 
-                entrymatrix[i][j] = calculedifferencenonbeneficial(entrymatrix[i][j],maxprice, minprice)
+                entrymatrix[i][j] = calculedifferencenonbeneficial(entrymatrix[i][j],entrymatrix[4][j], entrymatrix[5][j])
             else :
-                #entrimatrx[i][j] = calculedifferencenonbeneficial(entrymatrix[i][j],maxprice, minprice)
-                entrymatrix[i][j] = calculeDiffbeneficial(entry)
-
+                entrymatrix[i][j] = calculeDiffbeneficial(entrymatrix[i][j],entrymatrix[4][j], entrymatrix[5][j])
+           
     #hna reni rod la matrice m3Amra
     return entrymatrix            
 
 
-matrixaftersteptwo= steptwo(subnpmatix)    
-print(matrixaftersteptwo)   
-
-
-
-
-
-
-
-
-# https://www.youtube.com/watch?v=xe2XgGrI0Sg&t=55s
-
-
-
-
-
-
-
-
-
+print(steptwo(y))
+ 
