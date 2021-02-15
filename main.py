@@ -232,6 +232,17 @@ print(matrix_m1, matrix_m2, matrix_m3, matrix_m4)
 mastermatrix = np.vstack([matrix_m1, matrix_m2, matrix_m3, matrix_m4])
 print('#############')
 printmatrix(mastermatrix)
-
-#matrix de contingence
-print(mastermatrix.sum(axis=1))
+#submatrix to make sum
+submatrixcontingence = mastermatrix[:,1:]
+#changing its type to float (to be able to sum)
+submatrixcontingence1 = submatrixcontingence.astype(np.float)
+#matrix de contingence 
+summ = submatrixcontingence1.sum(axis=1)
+print("SUM")
+print(summ)
+#flip the matix, add row the flip it aggain 
+submatrixcontingence11 = np.matrix(submatrixcontingence1).transpose()
+# retranspos
+#m1
+matrixsummed = np.vstack([submatrixcontingence11, summ])
+print(matrixsummed)
