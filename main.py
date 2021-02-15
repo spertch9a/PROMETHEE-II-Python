@@ -157,4 +157,44 @@ def changetozeros(matrix):
                 matrix[i][j] = 0
     return matrix 
 
-print(changetozeros(matrixaftersteptwo))
+matrixafterchange = changetozeros(matrixaftersteptwo)
+#STEP3 : nahasbou koul wahda w difference m3A lokhrine
+
+names = ['price', 'storage', 'camera', 'looks']
+starm1m2 = []
+matrix_m1 = matrixafterchange
+matrix_m2 = matrixafterchange
+matrix_m3 = matrixafterchange
+matrix_m4 = matrixafterchange
+
+matrixX, matrixY = matrix_m1.shape
+
+def stepthree(matrix, ligne) :
+	print('Alternative : {}'.format(ligne))
+	if (ligne != 1):
+		matrix[[0,ligne-1]] = matrix[[ligne-1, 0]]
+	else:
+		pass
+
+	new_matrix = []
+	reverse_matrix = matrix.transpose()
+	
+	for line in reverse_matrix:
+		data = []
+		for i in line[1:]:
+			data.append(line[0]-i)
+		new_matrix.append(data)
+	
+	result_matrix = np.matrix(new_matrix).transpose()
+
+	print(result_matrix)
+
+
+
+stepthree(matrix_m1, 1)
+stepthree(matrix_m2, 2)
+stepthree(matrix_m3, 3)
+stepthree(matrix_m4, 4)
+
+
+
