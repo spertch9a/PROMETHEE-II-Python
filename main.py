@@ -106,9 +106,53 @@ print("maxminstorage : ", maxminstorage(y))
 print("maxmincamera : ", maxmincamera(y))
 print("maxminlooks : ", maxminlooks(y))
 
-#STEP 2 :  calcule des difference 
-def calculeDiff():
-    #max_col  - min_c
+maxprice, minprice = maxminprice(y)
+maxstorage, minstorage = maxminstorage(y)
+maxcamera, mincamera = maxminstorage(y)
+maxlooks, minlooks = maxminlooks(y)
+#STEP 2s,m :  calcule des difference
+#max_col  - courant_col / max_col - min_col 
+subnpmatixmaxed = np.vstack([subnpmatix, [maxprice, maxstorage, maxcamera, maxlooks]])
+subnpmatixmaxedminimizeded = np.vstack([subnpmatixmaxed, [minprice, minstorage, mincamera, minlooks]])
+#hna la matrice ta3na ghedi nwejedhalkom bach nakharbo fiha 
+y = subnpmatixmaxedminimizeded.astype(np.float)
+print(subnpmatixmaxedminimizeded)
+print(y)
+
+
+
+
+
+def calculeDiffbeneficial(value, max_colmn,min_colomn):
+    return ((value-min_colmn)/(max_colmn-min_colomn))
+    
+def calculedifferencenonbeneficial(value,max_colmn, min_colomn):
+    return ((max_colmn-value)/(max_colmn-min_colomn))
+
+
+def steptwo(entrymatrix) :
+    for i in range(len(entrymatrix)) :  
+    #hna reni f  ligne
+        for j in range(len(entrymatrix[i]) - 2) :  
+            #hna reni f la column
+            if j == 0: 
+                entrymatrix[i][j] = calculedifferencenonbeneficial(entrymatrix[i][j],maxprice, minprice)
+            else :
+                #entrimatrx[i][j] = calculedifferencenonbeneficial(entrymatrix[i][j],maxprice, minprice)
+                entrymatrix[i][j] = calculeDiffbeneficial(entry)
+
+    #hna reni rod la matrice m3Amra
+    return entrymatrix            
+
+
+matrixaftersteptwo= steptwo(subnpmatix)    
+print(matrixaftersteptwo)   
+
+
+
+
+
+
 
 
 # https://www.youtube.com/watch?v=xe2XgGrI0Sg&t=55s
