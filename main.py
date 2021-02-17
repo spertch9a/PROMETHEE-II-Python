@@ -164,19 +164,51 @@ def mult_matrix_vect(matrix, weight):
             matrix[i][j] = matrix[i][j]* weight[j]
     return matrix
 
-def aggregate_matrix_avg(matrix):
+def add_aggregated_line(matrix):
     average_line_weight = []
     
     for i in range(len(matrix)) :
-        print(len(matrix))
         sum = 0  
         for j in range(len(matrix[i])) :
             sum = sum + matrix[i][j] 
-        print(sum)
         average_line_weight.append(sum)
         
     matrix = np.vstack([matrix.transpose(), average_line_weight])
     return matrix
+
+
+def create_aggregated_matrix(matrix,ligne, colone):
+    # retrieve only the aggregated column(list)
+    temporary_list = []
+    aggregate_column = np.array(matrix[:, -1].transpose())
+    for i in range(len(aggregate_column)) :
+        for j in range(len(aggregate_column[i])):
+            temporary_list.append(aggregate_column[i][j])
+
+    # old_matrix = matrix[:, :-1] 
+    # create a new matrix with those data
+    aggregated_matrix = []
+    for i in range(ligne) :  
+        for j in range(colone) : 
+            if i == j:
+                aggregated_matrix.append(0)
+            else :     
+                aggregated_matrix.append(temporary_list[i])
+    
+    return np.array(aggregated_matrix).reshape(ligne, colone)
+
+def add_leaving_flow_line(matrix):
+    average_line_weight = []
+    
+    for i in range(len(matrix)) :
+        sum = 0  
+        for j in range(len(matrix[i])) :
+            sum = (sum + matrix[i][j]) 
+        average_line_weight.append(sum/3)
+        
+    matrix = np.vstack([matrix.transpose(), average_line_weight])
+    return matrix
+
 matrixafterchange = changetozeros(matrixaftersteptwo)
 #STEP3 : nahasbou koul wahda w difference m3A lokhrine
 
@@ -276,35 +308,24 @@ weights = [0.35, 0.25, 0.25, 0.15]
 
 new_matrix = mult_matrix_vect(arraymatrix2, weights)
 
-print('****************')
+print('we multyplie matrix by weights')
 print(new_matrix)
 # add column aggregate 
-aggregate_matrix = np.matrix(aggregate_matrix_avg(new_matrix)).transpose()
+aggregate_matrix = np.matrix(add_aggregated_line(new_matrix)).transpose()
 
-print('^^^^^^^^^^^^^^^^^')
+print('add aggreagated column')
 print(aggregate_matrix)
 
 
 
 
+print('create aggregated preference function')
 
-# # Sorted Array
-# sorted_array = aggregate_matrix[np.argsort(aggregate_matrix[:, 4])]
+aggregated_preference_matrix = create_aggregated_matrix(aggregate_matrix,4, 4)
+print(aggregated_preference_matrix)
 
-# print('²²²²²²²²²²²²²²²²²')
-# print(sorted_array)
+print('add leaving flow column')
+leaving_flow = add_leaving_flow_line(aggregated_preference_matrix) 
+print(leaving_flow)
 
-# #submatrix to make sum
-# submatrixcontingence = mastermatrix[:,1:]
-# #changing its type to float (to be able to sum)
-# submatrixcontingence1 = submatrixcontingence.astype(np.float)
-# #matrix de contingence 
-# summ = submatrixcontingence1.sum(axis=1)
-# print("SUM")
-# print(summ)
-# #flip the matix, add row the flip it aggain 
-# submatrixcontingence11 = np.matrix(submatrixcontingence1).transpose()
-# # retranspos
-# #m1
-# matrixsummed = np.vstack([submatrixcontingence11, summ])
-# print(matrixsummed)
+# transpose to add netering flow
