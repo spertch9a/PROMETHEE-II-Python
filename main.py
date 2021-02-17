@@ -3,6 +3,7 @@ Authon Oussama FORTAS
 """
 import numpy as np
 from numpy.core.defchararray import array
+import time
 print("PROMETHEE 2 METHOD")
 print("#######################################################")
 
@@ -35,7 +36,7 @@ def printmatrix (matrix):
 printmatrix(Matrix)
 
 print("Full Ranking")
-
+time.sleep(1)
 #Step 1 : Normalize the Evaluation Matrix (decision matrix) 
 print("STEP 1 : Normalize the Evaluation Matrix")
 """
@@ -47,7 +48,7 @@ For each criteria we need to calculate the maximum and minimum for each criteria
 npmatrix  = np.array(Matrix)
 subnpmatix = npmatrix[1:,1:]
 print("npmatrix ")
-
+time.sleep(3)
 maxprice= 0  
 maxstorage= 0
 maxcamera = 0
@@ -106,7 +107,7 @@ print("maxminprice : ", maxminprice(y))
 print("maxminstorage : ", maxminstorage(y))
 print("maxmincamera : ", maxmincamera(y))
 print("maxminlooks : ", maxminlooks(y))
-
+time.sleep(1)
 maxprice, minprice = maxminprice(y)
 maxstorage, minstorage = maxminstorage(y)
 maxcamera, mincamera = maxminstorage(y)
@@ -119,7 +120,7 @@ subnpmatixmaxedminimizeded = np.vstack([subnpmatixmaxed, [minprice, minstorage, 
 y = subnpmatixmaxedminimizeded.astype(np.float)
 print(subnpmatixmaxedminimizeded)
 print(y)
-
+time.sleep(3)
 
 
 
@@ -241,7 +242,7 @@ def stepthree(matrix, ligne) :
 
     print(result_matrix)
     return result_matrix
-
+time.sleep(3)
 
 matrix_m1 = stepthree(matrix_m1, 1)
 matrix_m2 = stepthree(matrix_m2, 2)
@@ -310,12 +311,13 @@ new_matrix = mult_matrix_vect(arraymatrix2, weights)
 
 print('we multyplie matrix by weights')
 print(new_matrix)
+time.sleep(3)
 # add column aggregate 
 aggregate_matrix = np.matrix(add_aggregated_line(new_matrix)).transpose()
 
 print('add aggreagated column')
 print(aggregate_matrix)
-
+time.sleep(3)
 
 
 
@@ -323,9 +325,9 @@ print('create aggregated preference function')
 
 aggregated_preference_matrix = create_aggregated_matrix(aggregate_matrix,4, 4)
 print(aggregated_preference_matrix)
-
+time.sleep(3)
 print('add leaving flow column')
 leaving_flow = add_leaving_flow_line(aggregated_preference_matrix) 
 print(leaving_flow)
-
+time.sleep(3)
 # transpose to add netering flow
