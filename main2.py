@@ -236,4 +236,4 @@ print(talyabachtetsetef[:,-1])
 # Sort 2D numpy array by first column
 sortedArr = talyabachtetsetef[talyabachtetsetef[:,-1].argsort()]
 print('Sorted 2D Numpy Array')
-print(sortedArr)
+print(np.flipud(sortedArr))
