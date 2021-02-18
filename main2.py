@@ -196,7 +196,7 @@ hamoud = create_aggregated_matrix(aggregated_matrix)
 
 print("HADA HAMOUD")
 print(hamoud)
-
+linesha9eh = hamoud
 #flot entrant w sortant
 def sumColumn(m):
     return [sum(col) for col in zip(*m)]
@@ -215,3 +215,25 @@ sommeeecolonne.append(0)
 hamoud = np.vstack([hamoud1, sommeeecolonne ])
 print("hada hamoud kamel b les flots")
 print(hamoud)
+
+fachnhat = np.subtract(hamoud[:,-1], hamoud[-1,:])
+sort = -np.sort(- fachnhat)
+print("fachnhat")
+print(fachnhat)
+
+print("sort")
+print(sort)
+
+linesha9eh = np.vstack([Alternatives, linesha9eh.transpose() ])
+def remove_last_element(arr):
+    return arr[np.arange(arr.size - 1)]
+fachnhat = remove_last_element(fachnhat)
+
+talyabachtetsetef  = np.vstack([linesha9eh, fachnhat]).transpose()
+print("sma3")
+print(talyabachtetsetef[:,-1])
+
+# Sort 2D numpy array by first column
+sortedArr = talyabachtetsetef[talyabachtetsetef[:,-1].argsort()]
+print('Sorted 2D Numpy Array')
+print(sortedArr)
