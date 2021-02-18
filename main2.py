@@ -145,21 +145,73 @@ print('Agregate_preference_matrix_with_sum \n', Agregate_preference_matrix_with_
 def create_aggregated_matrix(matrix):
     # retrieve only the aggregated column(list)
     aggregate_column = np.array(matrix[:, -1].transpose())
+    aggr = [0.022,0.022,0.36,0.17,0.35,0.31,0.37,0.55,0.35,0.25,0.25,0.08]
 
     print(aggregate_column)
+    print("type of aggregate_column")
+    print(type(aggregate_column))
 
+
+  #  aggregated_matrix  = [[len(Alternatives), len(Alternatives) ]]
+    #hada el hmar ghadi ylez madam les valeurs yethattou
+   # print(np.array(aggregated_matrix).shape)
+    for i in range(len(aggregated_matrix)) :  
+        for j in range(len(aggregated_matrix[i])) : 
+            print(i,j)
+            
+            if i == j:
+                aggregated_matrix[i][j] = 0
+                print("fett")
+                print("index i = j"+str(i)+"et "+str(j))
+         
+           
+            else:  
+                aggregated_matrix[i][j]= aggr[0]
+                aggr.pop(0) 
+                print("index i != j"+str(i)+"et "+str(j))
+                
+                # aggregated_matrix.append(aggregate_column[j])
+    # print('lol',aggregated_matrix)
+    print(np.array(aggregated_matrix).shape)
+    return aggregated_matrix#.reshape(len(Alternatives), len(Alternatives))
+def sum_matrix(matriix):
+    ligne = []
+    # for i in range(len(matriix)):
+    #     print(matriix[i,:])
+    # return ligne
+    pass      
+
+#aggregated_preference_function = create_aggregated_matrix(Agregate_preference_matrix_with_sum)
+#print('aggregated_preference_function \n', aggregated_preference_function)
+#ligne = sum_matrix(aggregated_preference_function)
+#print('sum Ligne \n', ligne)
     # old_matrix = matrix[:, :-1] 
     # create a new matrix with those data
-    aggregated_matrix = []
-    for i in range(len(Alternatives)) :  
-        for j in range(len(Alternatives)) : 
-            if i == j:
-                aggregated_matrix.append(0)
-            else: 
-                aggregated_matrix.append(aggregate_column[j-1])
-                # aggregated_matrix.append(aggregate_column[j])
-    print('lol',aggregated_matrix)
-    # return np.array(aggregated_matrix).reshape(len(Alternatives), len(Alternatives)).transpose()
+    
+aggregated_matrix = np.zeros((len(Alternatives), len(Alternatives)))
 
-aggregated_preference_function = create_aggregated_matrix(Agregate_preference_matrix_with_sum)
-print('aggregated_preference_function \n', aggregated_preference_function)
+print("len alternatives")
+print(len(Alternatives))
+hamoud = create_aggregated_matrix(aggregated_matrix)
+
+print("HADA HAMOUD")
+print(hamoud)
+
+#flot entrant w sortant
+def sumColumn(m):
+    return [sum(col) for col in zip(*m)]
+
+sommeeecolonne= sumColumn(hamoud)
+sumrows = np.sum(hamoud, axis = 1)
+print(sumrows)
+
+
+hamoud1 = np.vstack([hamoud.transpose(), sumrows]).transpose()
+print("b sumrows ")
+print(hamoud1)
+
+print("longeuer some colm" , len(sommeeecolonne))
+sommeeecolonne.append(0)
+hamoud = np.vstack([hamoud1, sommeeecolonne ])
+print("hada hamoud kamel b les flots")
+print(hamoud)
