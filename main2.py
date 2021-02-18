@@ -155,10 +155,11 @@ def create_aggregated_matrix(matrix):
         for j in range(len(Alternatives)) : 
             if i == j:
                 aggregated_matrix.append(0)
-            else :     
-                aggregated_matrix.append(aggregate_column[i])
-    
-    return np.array(aggregated_matrix).reshape(len(Alternatives), len(Alternatives)).transpose()
+            else: 
+                aggregated_matrix.append(aggregate_column[j-1])
+                # aggregated_matrix.append(aggregate_column[j])
+    print('lol',aggregated_matrix)
+    # return np.array(aggregated_matrix).reshape(len(Alternatives), len(Alternatives)).transpose()
 
 aggregated_preference_function = create_aggregated_matrix(Agregate_preference_matrix_with_sum)
 print('aggregated_preference_function \n', aggregated_preference_function)
