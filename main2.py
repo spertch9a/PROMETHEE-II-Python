@@ -1,6 +1,12 @@
 """
-Author Oussama FORTAS
+Authors Oussama FORTAS
+        Aimene BAHRI
+        Ali Atmani
+        Abed Kebir
 """
+import sys
+import numpy
+numpy.set_printoptions(threshold=sys.maxsize)
 print("PROMETHEE 2 METHOD")
 print("#######################################################")
 
@@ -206,11 +212,7 @@ print(hamoud)
 newsommecolonne.append(0)
 hamoud= np.vstack([hamoud.transpose(), newsommecolonne]).transpose()
 print("hamoud kamel\n", hamoud)
-print("longeuer some colm" , len(sommeeecolonne))
-sommeeecolonne.append(0)
-hamoud = np.vstack([hamoud1, sommeeecolonne ])
-print("hada hamoud kamel b les flots")
-print(hamoud)
+
 
 #here i'll be using a function to calculate the flots 
 def calculateflows(matrix):
@@ -220,20 +222,28 @@ def calculateflows(matrix):
     return diffs
 
 print("flowshamoud")
-print(calculateflows(hamoud))
+differencesflots = calculateflows(hamoud)
+print(differencesflots)
 
 
+alt = np.append(Alternatives, " ")
+linesha9eh = np.vstack([alt, hamoud.transpose()])
+#so far hamoud is transposed 
 
-linesha9eh = np.vstack([Alternatives, linesha9eh.transpose() ])
+
 # def remove_last_element(arr):
 #     return arr[np.arange(arr.size - 1)]
 # fachnhat = remove_last_element(fachnhat)
 
-# talyabachtetsetef  = np.vstack([linesha9eh, fachnhat]).transpose()
+talyabachtetsetef  = np.vstack([linesha9eh, differencesflots]).transpose()
 print("sma3")
-# print(talyabachtetsetef[:,-1])
+print("##############")
+print(talyabachtetsetef)
 
 # Sort 2D numpy array by first column
-# sortedArr = talyabachtetsetef[talyabachtetsetef[:,-1].argsort()]
+sortedArr = talyabachtetsetef[talyabachtetsetef[:,-1].argsort()]
 print('Sorted 2D Numpy Array')
+print("##############")
 print(np.flipud(sortedArr))
+print("Final Sort is : ")
+print(sortedArr[:,0])
