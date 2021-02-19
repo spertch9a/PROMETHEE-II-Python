@@ -187,12 +187,13 @@ sumrows = np.sum(hamoud, axis = 1)
 #we need to deivde those calculated vvalues on the number of alternatives -1
 newsommecolonne = []
 newsumrow= []
-print("lennn", len(hamoud) -1)
 for x in sommeeecolonne:
     newsommecolonne.append(x /(len(hamoud) - 1))
+
 for x in sumrows:
     newsumrow.append(x /(len(hamoud) - 1))
-        
+print(sommeeecolonne)
+print(sumrows)        
 print("flots entrants \n" , newsommecolonne)
 print("flots sortants \n" , newsumrow)
 
