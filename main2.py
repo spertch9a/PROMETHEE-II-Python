@@ -238,13 +238,16 @@ linesha9eh = np.vstack([alt, hamoud.transpose()])
 
 talyabachtetsetef  = np.vstack([linesha9eh, differencesflots]).transpose()
 print("sma3")
+
 print("##############")
-print(talyabachtetsetef)
+with numpy.printoptions(threshold=numpy.inf):
+    print(talyabachtetsetef[:-1,:])
 
 # Sort 2D numpy array by first column
 sortedArr = talyabachtetsetef[talyabachtetsetef[:,-1].argsort()]
 print('Sorted 2D Numpy Array')
 print("##############")
-print(np.flipud(sortedArr))
+with numpy.printoptions(threshold=numpy.inf):
+    print(np.flipud(sortedArr))
 print("Final Sort is : ")
 print(sortedArr[:,0])
