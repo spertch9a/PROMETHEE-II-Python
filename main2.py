@@ -192,15 +192,20 @@ for x in sommeeecolonne:
 
 for x in sumrows:
     newsumrow.append(x /(len(hamoud) - 1))
+
+
 print(sommeeecolonne)
 print(sumrows)        
 print("flots entrants \n" , newsommecolonne)
 print("flots sortants \n" , newsumrow)
 
-hamoud1 = np.vstack([hamoud.transpose(), sumrows]).transpose()
-print("b sumrows ")
-print(hamoud1)
+hamoud = np.vstack([hamoud, newsumrow])
+print("b colmns ")
+print(hamoud)
 
+newsommecolonne.append(0)
+hamoud= np.vstack([hamoud.transpose(), newsommecolonne]).transpose()
+print("hamoud kamel\n", hamoud)
 print("longeuer some colm" , len(sommeeecolonne))
 sommeeecolonne.append(0)
 hamoud = np.vstack([hamoud1, sommeeecolonne ])
