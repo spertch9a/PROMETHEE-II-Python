@@ -119,9 +119,9 @@ def mult_matrix_vect(matrix, weight):
 def show_mult_matrix_vect(matrix, weight):
     data = []
     for i in range(len(matrix)) :  
-        print(range(len(matrix)))
+       
         for j in range(len(matrix[i])) : 
-            print(range(len(matrix[i]))) 
+           
             data.append('{}*{}'.format(weight[j],matrix[i][j]))
     return np.array(data)
 
@@ -160,9 +160,7 @@ def create_aggregated_matrix(matrix, aggr):
     #hada el hmar ghadi ylez madam les valeurs yethattou
    # print(np.array(aggregated_matrix).shape)
     for i in range(len(aggregated_matrix)) :  
-        for j in range(len(aggregated_matrix[i])) : 
-            print(i,j)
-            
+        for j in range(len(aggregated_matrix[i])) :       
             if i == j:
                 aggregated_matrix[i][j] = 0        
             else:  
