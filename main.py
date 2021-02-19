@@ -1,171 +1,138 @@
 """
-Authon Oussama FORTAS
+Authors Oussama FORTAS
+        Aimene BAHRI
+        Ali Atmani
+        Abed Kebir
 """
-import numpy as np
-from numpy.core.defchararray import array
-import time
+import sys
+import numpy
+numpy.set_printoptions(threshold=sys.maxsize)
 print("PROMETHEE 2 METHOD")
 print("#######################################################")
 
 print("We will be using AHP : Analytic Hierarchy Process.")
 
-#We'll use the mobile choosing example, 
-"""
-The criterias to choose upon are 
-(Weightage= 0.35) Price or Cost 
-(Weightage=0.25 ) Storage space
-(Weightage=0.25 ) Camera
-(Weightage=0.15 ) Looks =  {Excellent : 5 , Good : 4 , Average : 3  , Below Average :2 , Low : 1}
-"""
+import csv
+import numpy as np
 
-
-Matrix = [["Attribute or Criteria", "Price or Cost", "Storage Space", "Camera", "Looks"], 
-    ["Mobile 1", 250, 16, 12, 5],
-    ["Mobile 2", 200, 16, 8 ,3],
-    ["Mobile 3", 300, 32, 16, 4],
-    ["Mobile 4", 275, 32, 8, 2]]
-
+Matrix = np.array(list(csv.reader(open("MP.csv", "r", encoding="utf8"), delimiter=",")))
+print(Matrix)
 #to print matrix in a good format 
 #len(matix) gives us the number of rows
-def printmatrix (matrix): 
-    for i in range(len(matrix)) :  
-        for j in range(len(matrix[i])) :  
-            print(matrix[i][j], end=" ") 
-        print() 
 
-printmatrix(Matrix)
 
-print("Full Ranking")
-time.sleep(1)
-#Step 1 : Normalize the Evaluation Matrix (decision matrix) 
+# Step1 Normalize the evaluation matrix (Decision Matrix)
 print("STEP 1 : Normalize the Evaluation Matrix")
-"""
-Captures / Formula for beneficial and non beneficial criteria
-Beneficial are direct categories
-Non beneficial are indirect ones
-For each criteria we need to calculate the maximum and minimum for each criteria
-"""
-npmatrix  = np.array(Matrix)
-subnpmatix = npmatrix[1:,1:]
-print("npmatrix ")
-time.sleep(3)
-maxprice= 0  
-maxstorage= 0
-maxcamera = 0
-maxlooks= 0 
-minprice = 1000
-minstorage = 1000
-mincamera = 1000
-minlooks = 1000
-y = subnpmatix.astype(np.float)
-def maxminprice(matrix) :
-    maxprice = 0
-    minprice  = 1000
-    for row in range(len(matrix)):
-     if(maxprice < matrix[row][0]) : 
-        maxprice = matrix[row][0]
-     if(minprice > matrix[row][0]) :     
-        minprice = matrix[row][0]
+# make the matrix as array to facilitate the Loop function
+array_Matrix  = np.array(Matrix)
+# Delete first ligne and column and keep only the float variables
+Alternative_matix = array_Matrix[1:,1:].astype(np.float)
+print('Alternative_matix \n',Alternative_matix)
+# Save the Labels of the Ligne we deleted (we will need it later)
+labels = array_Matrix[0,1:]
+print('labels \n',labels)
+# Save the Names of the Column we deleted (we will need it later)
+Alternatives = array_Matrix[1:,0]
+print('Names \n',Alternatives)
+# Get min and max for each criteria
+min_criteria_array = Alternative_matix.min(axis=0)
+max_criteria_array = Alternative_matix.max(axis=0)
+print(min_criteria_array)
+print(max_criteria_array)
 
-    return maxprice, minprice
-def maxminstorage(matrix) :
-    maxstorage = 0
-    minstorage  = 1000
-    for row in range(len(matrix)):
-     if(maxstorage < matrix[row][1]) : 
-        maxstorage = matrix[row][1]
-     if(minstorage > matrix[row][1]) :     
-        minstorage = matrix[row][1]
+# Calculate the new matrix with beneficial non beneficial criteria:
+# Beneficial Criteria == 1(python nebdou mel 0)
+# NON ben Criteria == 2,3,4(python == 1,2,3)
+for i in range(len(Alternative_matix)):
+    for j in range(len(Alternative_matix[i])):
+        if j == 0:
+            Alternative_matix[i][j] = (max_criteria_array[j]-Alternative_matix[i][j])/(max_criteria_array[j]-min_criteria_array[j])
+        else:
+            Alternative_matix[i][j] = (Alternative_matix[i][j]-min_criteria_array[j])/(max_criteria_array[j]-min_criteria_array[j])
 
-    return maxstorage, minstorage
+print(Alternative_matix)
 
-def maxmincamera(matrix) :
-    maxcamera = 0
-    mincamera  = 1000
-    for row in range(len(matrix)):
-     if(maxcamera < matrix[row][2]) : 
-        maxcamera = matrix[row][2]
-     if(mincamera > matrix[row][2]) :     
-        mincamera = matrix[row][2]
+print("STEP 2 : Calculate Evaluative ieme per the othere {m1-m2 | m1-m3 | ....}")
+# Create the Alternatives Possibilities array[m1-m2,........]
+def all_alternatives(Alternatives):
+    Alternative_possibilities = []
+    for i in range(len(Alternatives)):
+        for j in range(len(Alternatives)):
+            if i != j:
+                Alternative_possibilities.append(Alternatives[i]+'-'+Alternatives[j])
+            else:
+                pass
+    return np.array(Alternative_possibilities).reshape(len(Alternative_possibilities),1)
+Alternative_possibilities = all_alternatives(Alternatives)
+print('Alternative_possibilities \n', Alternative_possibilities)
 
-    return maxcamera, mincamera
+# create the matrix of all variables possibilities:
+def all_variables(matrix):
+    new_matrix = []
+    for i in range(len(matrix)):
+        for j in range(len(matrix[i])):
+            if i != j:
+                new_matrix.append(matrix[i]-matrix[j])
+            else:
+                pass
+    return np.array(new_matrix).reshape(len(matrix)*(len(matrix)-1),len(matrix))
 
-def maxminlooks(matrix) :
-    maxlooks = 0
-    minlooks  = 1000
-    for row in range(len(matrix)):
-     if(maxlooks < matrix[row][3]) : 
-        maxlooks = matrix[row][3]
-     if(minlooks > matrix[row][3]) :     
-        minlooks = matrix[row][3]
+variables_possibilities = all_variables(Alternative_matix)
+print('variables_possibilities \n', variables_possibilities)
 
-    return maxlooks, minlooks
+# concatenate the Names and variables related 
+the_all_matrix = np.hstack([Alternative_possibilities, variables_possibilities])
+print('The All Matrix \n', the_all_matrix)
 
-
-
-print("maxminprice : ", maxminprice(y))
-print("maxminstorage : ", maxminstorage(y))
-print("maxmincamera : ", maxmincamera(y))
-print("maxminlooks : ", maxminlooks(y))
-time.sleep(1)
-maxprice, minprice = maxminprice(y)
-maxstorage, minstorage = maxminstorage(y)
-maxcamera, mincamera = maxminstorage(y)
-maxlooks, minlooks = maxminlooks(y)
-#STEP 2s,m :  calcule des difference
-#max_col  - courant_col / max_col - min_col 
-subnpmatixmaxed = np.vstack([subnpmatix, [maxprice, maxstorage, maxcamera, maxlooks]])
-subnpmatixmaxedminimizeded = np.vstack([subnpmatixmaxed, [minprice, minstorage, mincamera, minlooks]])
-#hna la matrice ta3na ghedi nwejedhalkom bach nakharbo fiha 
-y = subnpmatixmaxedminimizeded.astype(np.float)
-print(subnpmatixmaxedminimizeded)
-print(y)
-time.sleep(3)
-
-
-
-
-def calculeDiffbeneficial(value, max_colmn,min_colmn):
-    return ((value - min_colmn) / (max_colmn - min_colmn))
-    
-def calculedifferencenonbeneficial(value,max_colmn, min_colmn):
-    return ((max_colmn - value) / (max_colmn - min_colmn))
-
-
-
-print(calculeDiffbeneficial(16,18,4))
-
-def steptwo(entrymatrix) :
-    for i in range(len(entrymatrix-2)) :  
-    #hna reni f  ligne
-        for j in range(len(entrymatrix[i])) :  
-            #hna reni f la column
-            if j == 0: 
-                entrymatrix[i][j] = calculedifferencenonbeneficial(entrymatrix[i][j],entrymatrix[4][j], entrymatrix[5][j])
-            else :
-                entrymatrix[i][j] = calculeDiffbeneficial(entrymatrix[i][j],entrymatrix[4][j], entrymatrix[5][j])
-           
-    #hna reni rod la matrice m3Amra
-    return entrymatrix            
-
-#gla3T zouj stoura twala
-matrixaftersteptwo = steptwo(y)[:4][:4]
- 
- #darwek li raha taht 0 nrodha 0 
+print("STEP 3 : Calculate the PREFERENCE Function")
+# Create an updated matrix that return 0 if value is negative or equal to 0 
+# else keep value as it it
 def changetozeros(matrix):
     for i in range(len(matrix)) :  
         for j in range(len(matrix[i])) :  
-           if matrix[i][j] <0 :
+            if matrix[i][j] <= 0 :
                 matrix[i][j] = 0
-    return matrix 
+    return matrix
 
+Preference_matrix = changetozeros(variables_possibilities)
+print('PREFERENCE_matrix \n', Preference_matrix)
+
+# concatenate the Names and preferences related 
+the_Preference_matrix = np.hstack([Alternative_possibilities, Preference_matrix])
+print('the_Preference_matrix \n', the_Preference_matrix)
+
+# calculate the aggregated preferenbce function
+# hna nedourbou f les poids(weights)
+# lets call the weights from a csv file
+weights =list(csv.reader(open("weights.csv", "r", encoding="utf8"), delimiter=","))
+print('weights \n', weights)
+array_weights = np.asarray(weights[0], dtype='float64')
+print('array_weights \n', array_weights)
+
+# lets create a fucntion to mult the weights with the matrix of preferences variables
 def mult_matrix_vect(matrix, weight):
     for i in range(len(matrix)) :  
         for j in range(len(matrix[i])) :  
             matrix[i][j] = matrix[i][j]* weight[j]
     return matrix
+# TODO: Check this multyplie function
+def show_mult_matrix_vect(matrix, weight):
+    data = []
+    for i in range(len(matrix)) :  
+       
+        for j in range(len(matrix[i])) : 
+           
+            data.append('{}*{}'.format(weight[j],matrix[i][j]))
+    return np.array(data)
 
-def add_aggregated_line(matrix):
+Agregate_preference_matrix = mult_matrix_vect(Preference_matrix, array_weights)
+show_calculation = show_mult_matrix_vect(Preference_matrix, array_weights)
+
+print('show_calculation \n', show_calculation)
+print('Agregate_preference_matrix \n', Agregate_preference_matrix)
+
+# lets add a column to sum these aggregated preferences
+def add_aggregated_preferences_line(matrix):
     average_line_weight = []
     
     for i in range(len(matrix)) :
@@ -174,160 +141,111 @@ def add_aggregated_line(matrix):
             sum = sum + matrix[i][j] 
         average_line_weight.append(sum)
         
-    matrix = np.vstack([matrix.transpose(), average_line_weight])
+    matrix = np.vstack([matrix.transpose(), average_line_weight]).transpose()
     return matrix
 
-
-def create_aggregated_matrix(matrix,ligne, colone):
+Agregate_preference_matrix_with_sum = add_aggregated_preferences_line(Agregate_preference_matrix)
+print('Agregate_preference_matrix_with_sum \n', Agregate_preference_matrix_with_sum)
+aggrsums = Agregate_preference_matrix_with_sum[:,-1]
+print(aggrsums)
+# take only the aggragated sum values(LAST column) and create aggregated preference Function
+def create_aggregated_matrix(matrix, aggr):
     # retrieve only the aggregated column(list)
-    temporary_list = []
     aggregate_column = np.array(matrix[:, -1].transpose())
-    for i in range(len(aggregate_column)) :
-        for j in range(len(aggregate_column[i])):
-            temporary_list.append(aggregate_column[i][j])
-
-    # old_matrix = matrix[:, :-1] 
-    # create a new matrix with those data
-    aggregated_matrix = []
-    for i in range(ligne) :  
-        for j in range(colone) : 
+    agrs = aggr.tolist()
+    print(aggregate_column)
+    print("type of aggregate_column")
+    print(type(aggregate_column))
+  #  aggregated_matrix  = [[len(Alternatives), len(Alternatives) ]]
+    #hada el hmar ghadi ylez madam les valeurs yethattou
+   # print(np.array(aggregated_matrix).shape)
+    for i in range(len(aggregated_matrix)) :  
+        for j in range(len(aggregated_matrix[i])) :       
             if i == j:
-                aggregated_matrix.append(0)
-            else :     
-                aggregated_matrix.append(temporary_list[i])
+                aggregated_matrix[i][j] = 0        
+            else:  
+                aggregated_matrix[i][j]= agrs[0]
+                agrs.pop(0) 
+            
+                
+                # aggregated_matrix.append(aggregate_column[j])
+    # print('lol',aggregated_matrix)
+    print(np.array(aggregated_matrix).shape)
+    return aggregated_matrix
     
-    return np.array(aggregated_matrix).reshape(ligne, colone)
+aggregated_matrix = np.zeros((len(Alternatives), len(Alternatives)))
 
-def add_leaving_flow_line(matrix):
-    average_line_weight = []
-    
-    for i in range(len(matrix)) :
-        sum = 0  
-        for j in range(len(matrix[i])) :
-            sum = (sum + matrix[i][j]) 
-        average_line_weight.append(sum/3)
-        
-    matrix = np.vstack([matrix.transpose(), average_line_weight])
-    return matrix
+print("len alternatives")
+print(len(Alternatives))
+hamoud = create_aggregated_matrix(aggregated_matrix, aggrsums)
 
-matrixafterchange = changetozeros(matrixaftersteptwo)
-#STEP3 : nahasbou koul wahda w difference m3A lokhrine
+print("HADA HAMOUD")
+print(hamoud)
+linesha9eh = hamoud
+#flot entrant w sortant
+def sumColumn(m):
+    return [sum(col) for col in zip(*m)] 
 
-names = ['price', 'storage', 'camera', 'looks']
-starm1m2 = []
-matrix_m1 = matrixafterchange
-matrix_m2 = matrixafterchange
-matrix_m3 = matrixafterchange
-matrix_m4 = matrixafterchange
+sommeeecolonne= sumColumn(hamoud)
 
-matrixX, matrixY = matrix_m1.shape
+sumrows = np.sum(hamoud, axis = 1)
+#we need to deivde those calculated vvalues on the number of alternatives -1
+newsommecolonne = []
+newsumrow= []
+for x in sommeeecolonne:
+    newsommecolonne.append(x /(len(hamoud) - 1))
 
-def stepthree(matrix, ligne) :
-    print('Alternative : {}'.format(ligne))
-    if (ligne != 1):
-       matrix[[0,ligne-1]] = matrix[[ligne-1, 0]]
-    else:
-    	pass
-
-    new_matrix = []
-    reverse_matrix = matrix.transpose()
-	
-    for line in reverse_matrix:
-        data = []
-        for i in line[1:]:
-            data.append(line[0]-i)
-        new_matrix.append(data)
-    
-    result_matrix = np.matrix(new_matrix).transpose()
-
-    print(result_matrix)
-    return result_matrix
-time.sleep(3)
-
-matrix_m1 = stepthree(matrix_m1, 1)
-matrix_m2 = stepthree(matrix_m2, 2)
-matrix_m3 = stepthree(matrix_m3, 3)
-matrix_m4 = stepthree(matrix_m4, 4)
-
-# add labels for each matrix
-labelsm1 =['m1-m2', 'm1-m3', 'm1-m4']
-labelsm2 =['m2-m1', 'm2-m3', 'm2-m4']
-labelsm3 =['m3-m1', 'm3-m2', 'm3-m4']
-labelsm4 =['m4-m1', 'm4-m2', 'm4-m3']
-#we'll transpose it, add a label to it and retranspose it to make the labels on the left column
-#transpose
-matrix_m1t = np.matrix(matrix_m1).transpose()
-matrix_m2t = np.matrix(matrix_m2).transpose()
-matrix_m3t = np.matrix(matrix_m3).transpose()
-matrix_m4t = np.matrix(matrix_m4).transpose()
-# retranspos
-#m1
-matrix_m1t = np.vstack([labelsm1, matrix_m1t])
-matrix_m1 = np.matrix(matrix_m1t).transpose()
-#m2
-matrix_m2t = np.vstack([labelsm2, matrix_m2t])
-matrix_m2 = np.matrix(matrix_m2t).transpose()
-#m3
-matrix_m3t = np.vstack([labelsm3, matrix_m3t])
-matrix_m3 = np.matrix(matrix_m3t).transpose()
-#m4
-matrix_m4t = np.vstack([labelsm4, matrix_m4t])
-matrix_m4 = np.matrix(matrix_m4t).transpose()
+for x in sumrows:
+    newsumrow.append(x /(len(hamoud) - 1))
 
 
+print(sommeeecolonne)
+print(sumrows)        
+print("flots entrants \n" , newsommecolonne)
+print("flots sortants \n" , newsumrow)
 
-# Add Labels
-print(matrix_m1, matrix_m2, matrix_m3, matrix_m4)
+hamoud = np.vstack([hamoud, newsumrow])
+print("b colmns ")
+print(hamoud)
 
-
-
-#  Concatenation
-mastermatrix = np.vstack([matrix_m1, matrix_m2, matrix_m3, matrix_m4])
-print('#############')
-print(mastermatrix)
-
-
-#submatrix to calculate matrix of oreference
-submastermatrix = mastermatrix[:,1:]
-#changing its type to float (to be able to sum)
-submastermatrix = submastermatrix.astype(np.float)
-
-# make the matrix readable on loop function using Array
-print('//////////')
-print(submastermatrix)
-
-# arraymatrix = array(submastermatrix)
-# print('----------------')
-# print(arraymatrix)
-
-arraymatrix2 = changetozeros(np.array(submastermatrix))
-
-print(arraymatrix2)
+newsommecolonne.append(0)
+hamoud= np.vstack([hamoud.transpose(), newsommecolonne]).transpose()
+print("hamoud kamel\n", hamoud)
 
 
-weights = [0.35, 0.25, 0.25, 0.15]
+#here i'll be using a function to calculate the flots 
+def calculateflows(matrix):
+    diffs=[]
+    for i in range(len(matrix)):
+        diffs.append(matrix[i,-1] - matrix[-1, i])
+    return diffs
 
-new_matrix = mult_matrix_vect(arraymatrix2, weights)
-
-print('we multyplie matrix by weights')
-print(new_matrix)
-time.sleep(3)
-# add column aggregate 
-aggregate_matrix = np.matrix(add_aggregated_line(new_matrix)).transpose()
-
-print('add aggreagated column')
-print(aggregate_matrix)
-time.sleep(3)
+print("flowshamoud")
+differencesflots = calculateflows(hamoud)
+print(differencesflots)
 
 
+alt = np.append(Alternatives, " ")
+linesha9eh = np.vstack([alt, hamoud.transpose()])
+#so far hamoud is transposed 
 
-print('create aggregated preference function')
 
-aggregated_preference_matrix = create_aggregated_matrix(aggregate_matrix,4, 4)
-print(aggregated_preference_matrix)
-time.sleep(3)
-print('add leaving flow column')
-leaving_flow = add_leaving_flow_line(aggregated_preference_matrix) 
-print(leaving_flow)
-time.sleep(3)
-# transpose to add netering flow
+# def remove_last_element(arr):
+#     return arr[np.arange(arr.size - 1)]
+# fachnhat = remove_last_element(fachnhat)
+
+talyabachtetsetef  = np.vstack([linesha9eh, differencesflots]).transpose()
+print("sma3")
+
+print("##############")
+with numpy.printoptions(threshold=numpy.inf):
+    print(talyabachtetsetef[:-1,:])
+
+# Sort 2D numpy array by first column
+sortedArr = talyabachtetsetef[talyabachtetsetef[:,-1].argsort()]
+print('Sorted 2D Numpy Array')
+print("##############")
+with numpy.printoptions(threshold=numpy.inf):
+    print(np.flipud(sortedArr))
+print("Final Sort is : ")
+print(sortedArr[:,0])
