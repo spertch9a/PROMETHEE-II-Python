@@ -146,12 +146,13 @@ def add_aggregated_preferences_line(matrix):
 
 Agregate_preference_matrix_with_sum = add_aggregated_preferences_line(Agregate_preference_matrix)
 print('Agregate_preference_matrix_with_sum \n', Agregate_preference_matrix_with_sum)
-
+aggrsums = Agregate_preference_matrix_with_sum[:,-1]
+print(aggrsums)
 # take only the aggragated sum values(LAST column) and create aggregated preference Function
-def create_aggregated_matrix(matrix):
+def create_aggregated_matrix(matrix, aggr):
     # retrieve only the aggregated column(list)
     aggregate_column = np.array(matrix[:, -1].transpose())
-    aggr = [0.022,0.022,0.36,0.17,0.35,0.31,0.37,0.55,0.35,0.25,0.25,0.08]
+    agrs = aggr.tolist()
     print(aggregate_column)
     print("type of aggregate_column")
     print(type(aggregate_column))
@@ -165,8 +166,8 @@ def create_aggregated_matrix(matrix):
             if i == j:
                 aggregated_matrix[i][j] = 0        
             else:  
-                aggregated_matrix[i][j]= aggr[0]
-                aggr.pop(0) 
+                aggregated_matrix[i][j]= agrs[0]
+                agrs.pop(0) 
             
                 
                 # aggregated_matrix.append(aggregate_column[j])
@@ -178,7 +179,7 @@ aggregated_matrix = np.zeros((len(Alternatives), len(Alternatives)))
 
 print("len alternatives")
 print(len(Alternatives))
-hamoud = create_aggregated_matrix(aggregated_matrix)
+hamoud = create_aggregated_matrix(aggregated_matrix, aggrsums)
 
 print("HADA HAMOUD")
 print(hamoud)
