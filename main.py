@@ -6,39 +6,51 @@ Authors Oussama FORTAS
 """
 import sys
 import numpy
-numpy.set_printoptions(threshold=sys.maxsize)
+import csv
+import numpy as np
+import time
+
+
+np.set_printoptions(threshold=sys.maxsize)
 print("PROMETHEE 2 METHOD")
 print("#######################################################")
 
 print("We will be using AHP : Analytic Hierarchy Process.")
+time.sleep(3)
 
-import csv
-import numpy as np
+
 
 Matrix = np.array(list(csv.reader(open("MP.csv", "r", encoding="utf8"), delimiter=",")))
 print(Matrix)
+time.sleep(3)
 #to print matrix in a good format 
 #len(matix) gives us the number of rows
 
 
 # Step1 Normalize the evaluation matrix (Decision Matrix)
 print("STEP 1 : Normalize the Evaluation Matrix")
+time.sleep(3)
 # make the matrix as array to facilitate the Loop function
 array_Matrix  = np.array(Matrix)
 # Delete first ligne and column and keep only the float variables
 Alternative_matix = array_Matrix[1:,1:].astype(np.float)
 print('Alternative_matix \n',Alternative_matix)
+time.sleep(3)
 # Save the Labels of the Ligne we deleted (we will need it later)
 labels = array_Matrix[0,1:]
 print('labels \n',labels)
+time.sleep(3)
 # Save the Names of the Column we deleted (we will need it later)
 Alternatives = array_Matrix[1:,0]
 print('Names \n',Alternatives)
+time.sleep(3)
 # Get min and max for each criteria
 min_criteria_array = Alternative_matix.min(axis=0)
 max_criteria_array = Alternative_matix.max(axis=0)
+print("MIN and MAX Criteria Array")
 print(min_criteria_array)
 print(max_criteria_array)
+time.sleep(3)
 
 # Calculate the new matrix with beneficial non beneficial criteria:
 # Beneficial Criteria == 1(python nebdou mel 0)
@@ -53,6 +65,7 @@ for i in range(len(Alternative_matix)):
 print(Alternative_matix)
 
 print("STEP 2 : Calculate Evaluative ieme per the othere {m1-m2 | m1-m3 | ....}")
+time.sleep(3)
 # Create the Alternatives Possibilities array[m1-m2,........]
 def all_alternatives(Alternatives):
     Alternative_possibilities = []
@@ -65,6 +78,7 @@ def all_alternatives(Alternatives):
     return np.array(Alternative_possibilities).reshape(len(Alternative_possibilities),1)
 Alternative_possibilities = all_alternatives(Alternatives)
 print('Alternative_possibilities \n', Alternative_possibilities)
+time.sleep(3)
 
 # create the matrix of all variables possibilities:
 def all_variables(matrix):
@@ -79,12 +93,15 @@ def all_variables(matrix):
 
 variables_possibilities = all_variables(Alternative_matix)
 print('variables_possibilities \n', variables_possibilities)
+time.sleep(3)
 
 # concatenate the Names and variables related 
 the_all_matrix = np.hstack([Alternative_possibilities, variables_possibilities])
 print('The All Matrix \n', the_all_matrix)
+time.sleep(3)
 
 print("STEP 3 : Calculate the PREFERENCE Function")
+
 # Create an updated matrix that return 0 if value is negative or equal to 0 
 # else keep value as it it
 def changetozeros(matrix):
@@ -96,18 +113,24 @@ def changetozeros(matrix):
 
 Preference_matrix = changetozeros(variables_possibilities)
 print('PREFERENCE_matrix \n', Preference_matrix)
+time.sleep(3)
 
 # concatenate the Names and preferences related 
 the_Preference_matrix = np.hstack([Alternative_possibilities, Preference_matrix])
 print('the_Preference_matrix \n', the_Preference_matrix)
+time.sleep(3)
 
 # calculate the aggregated preferenbce function
 # hna nedourbou f les poids(weights)
 # lets call the weights from a csv file
 weights =list(csv.reader(open("weights.csv", "r", encoding="utf8"), delimiter=","))
 print('weights \n', weights)
+time.sleep(2)
+
 array_weights = np.asarray(weights[0], dtype='float64')
 print('array_weights \n', array_weights)
+time.sleep(3)
+
 
 # lets create a fucntion to mult the weights with the matrix of preferences variables
 def mult_matrix_vect(matrix, weight):
@@ -129,7 +152,9 @@ Agregate_preference_matrix = mult_matrix_vect(Preference_matrix, array_weights)
 show_calculation = show_mult_matrix_vect(Preference_matrix, array_weights)
 
 print('show_calculation \n', show_calculation)
+time.sleep(3)
 print('Agregate_preference_matrix \n', Agregate_preference_matrix)
+time.sleep(3)
 
 # lets add a column to sum these aggregated preferences
 def add_aggregated_preferences_line(matrix):
@@ -146,6 +171,7 @@ def add_aggregated_preferences_line(matrix):
 
 Agregate_preference_matrix_with_sum = add_aggregated_preferences_line(Agregate_preference_matrix)
 print('Agregate_preference_matrix_with_sum \n', Agregate_preference_matrix_with_sum)
+time.sleep(3)
 aggrsums = Agregate_preference_matrix_with_sum[:,-1]
 print(aggrsums)
 # take only the aggragated sum values(LAST column) and create aggregated preference Function
@@ -154,8 +180,6 @@ def create_aggregated_matrix(matrix, aggr):
     aggregate_column = np.array(matrix[:, -1].transpose())
     agrs = aggr.tolist()
     print(aggregate_column)
-    print("type of aggregate_column")
-    print(type(aggregate_column))
   #  aggregated_matrix  = [[len(Alternatives), len(Alternatives) ]]
     #hada el hmar ghadi ylez madam les valeurs yethattou
    # print(np.array(aggregated_matrix).shape)
@@ -174,13 +198,11 @@ def create_aggregated_matrix(matrix, aggr):
     return aggregated_matrix
     
 aggregated_matrix = np.zeros((len(Alternatives), len(Alternatives)))
-
-print("len alternatives")
-print(len(Alternatives))
 hamoud = create_aggregated_matrix(aggregated_matrix, aggrsums)
 
 print("HADA HAMOUD")
 print(hamoud)
+time.sleep(3)
 linesha9eh = hamoud
 #flot entrant w sortant
 def sumColumn(m):
@@ -203,14 +225,16 @@ print(sommeeecolonne)
 print(sumrows)        
 print("flots entrants \n" , newsommecolonne)
 print("flots sortants \n" , newsumrow)
+time.sleep(3)
 
 hamoud = np.vstack([hamoud, newsumrow])
-print("b colmns ")
+print("b rows ")
 print(hamoud)
 
 newsommecolonne.append(0)
 hamoud= np.vstack([hamoud.transpose(), newsommecolonne]).transpose()
 print("hamoud kamel\n", hamoud)
+time.sleep(3)
 
 
 #here i'll be using a function to calculate the flots 
@@ -223,6 +247,7 @@ def calculateflows(matrix):
 print("flowshamoud")
 differencesflots = calculateflows(hamoud)
 print(differencesflots)
+time.sleep(3)
 
 
 alt = np.append(Alternatives, " ")
@@ -240,12 +265,14 @@ print("sma3")
 print("##############")
 with numpy.printoptions(threshold=numpy.inf):
     print(talyabachtetsetef[:-1,:])
-
+time.sleep(3)
 # Sort 2D numpy array by first column
 sortedArr = talyabachtetsetef[talyabachtetsetef[:,-1].argsort()]
 print('Sorted 2D Numpy Array')
 print("##############")
 with numpy.printoptions(threshold=numpy.inf):
     print(np.flipud(sortedArr))
+
+time.sleep(3)
 print("Final Sort is : ")
 print(sortedArr[:,0])
