@@ -15,7 +15,7 @@ print("We will be using AHP : Analytic Hierarchy Process.")
 import csv
 import numpy as np
 
-Matrix = np.array(list(csv.reader(open("MP.csv", "r", encoding="utf8"), delimiter=",")))
+Matrix = np.array(list(csv.reader(open("MP2.csv", "r"), delimiter=",")))
 print(Matrix)
 #to print matrix in a good format 
 #len(matix) gives us the number of rows
@@ -104,7 +104,7 @@ print('the_Preference_matrix \n', the_Preference_matrix)
 # calculate the aggregated preferenbce function
 # hna nedourbou f les poids(weights)
 # lets call the weights from a csv file
-weights =list(csv.reader(open("weights.csv", "r", encoding="utf8"), delimiter=","))
+weights =list(csv.reader(open("weights2.csv", "r"), delimiter=","))
 print('weights \n', weights)
 array_weights = np.asarray(weights[0], dtype='float64')
 print('array_weights \n', array_weights)
