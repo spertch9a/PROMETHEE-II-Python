@@ -20,7 +20,7 @@ time.sleep(3)
 
 
 
-Matrix = np.array(list(csv.reader(open("MP.csv", "r", encoding="utf8"), delimiter=",")))
+Matrix = np.array(list(csv.reader(open("MP.csv", "r"), delimiter=",")))
 print(Matrix)
 time.sleep(3)
 #to print matrix in a good format 
@@ -123,7 +123,7 @@ time.sleep(3)
 # calculate the aggregated preferenbce function
 # hna nedourbou f les poids(weights)
 # lets call the weights from a csv file
-weights =list(csv.reader(open("weights.csv", "r", encoding="utf8"), delimiter=","))
+weights =list(csv.reader(open("weights.csv", "r"), delimiter=","))
 print('weights \n', weights)
 time.sleep(2)
 
