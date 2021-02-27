@@ -18,29 +18,40 @@ print("We will be using AHP : Analytic Hierarchy Process.")
 time.sleep(3)
 
 Matrix = np.array(list(csv.reader(open("MP2.csv", "r"), delimiter=",")))
-print('Matricr de performance',Matrix)
+print('Matrice de performance',Matrix)
 
 print("STEP 1 : Normalize the Evaluation Matrix")
 array_Matrix  = np.array(Matrix)
-Alternative_matix = array_Matrix[1:,1:].astype(np.float)
+
+Alternative_matix = array_Matrix[2:,1:].astype(np.float)
 print('Alternative_matix \n',Alternative_matix)
+
 labels = array_Matrix[0,1:]
 print('labels \n',labels)
-Alternatives = array_Matrix[1:,0]
+
+Alternatives = array_Matrix[2:,0]
 print('Names \n',Alternatives)
+
+# TODO! Add beneficial and non benificial criterias
+maximisation = array_Matrix[1,1:]
+print('Beneficial or Not  \n',maximisation)
+
 # Get min and max for each criteria
 min_criteria_array = Alternative_matix.min(axis=0)
 print('min_criteria_array \n',min_criteria_array)
+
 max_criteria_array = Alternative_matix.max(axis=0)
 print('max_criteria_array \n',max_criteria_array)
-# TODO! Add beneficial and non benificial criterias
+
+
 for i in range(len(Alternative_matix)):
     for j in range(len(Alternative_matix[i])):
-        if j == 0:
+        if maximisation[j] == 'yes':
             Alternative_matix[i][j] = (max_criteria_array[j]-Alternative_matix[i][j])/(max_criteria_array[j]-min_criteria_array[j])
         else:
             Alternative_matix[i][j] = (Alternative_matix[i][j]-min_criteria_array[j])/(max_criteria_array[j]-min_criteria_array[j])
 print('Alternative_matix \n',Alternative_matix)
+time.sleep(3)
 
 print("STEP 2 : Calculate Evaluative ieme per the othere {m1-m2 | m1-m3 | ....}")
 # Create the Alternatives Possibilities array[m1-m2,........]
@@ -55,6 +66,7 @@ def all_alternatives(Alternatives):
     return np.array(Alternative_possibilities).reshape(len(Alternative_possibilities),1)
 Alternative_possibilities = all_alternatives(Alternatives)
 print('Alternative_possibilities \n', Alternative_possibilities)
+time.sleep(10)
 
 # create the matrix of all variables possibilities:
 def all_variables(matrix):
@@ -69,6 +81,7 @@ def all_variables(matrix):
 
 variables_possibilities = all_variables(Alternative_matix)
 print('variables_possibilities \n', variables_possibilities)
+
 print('Alternative_possibilities shape \n', Alternative_possibilities.shape)
 print('variables_possibilities shape \n', variables_possibilities.shape)
 
