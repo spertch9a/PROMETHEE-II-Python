@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*- 
 """
 Authors Oussama FORTAS
         Aimene BAHRI
@@ -5,8 +7,6 @@ Authors Oussama FORTAS
         Abed Kebir
         Benachenhou Linda
 """
-#!/usr/bin/env python
-# -*- coding: utf-8 -*- 
 
 import sys
 import numpy
@@ -124,7 +124,7 @@ elif sys.argv[1] == 4:
     weights =list(csv.reader(open("weights_decideur4(Représentant du public).csv", "r"), delimiter=","))
 else:
     print('Choisissez un des Decideur 1__4')
-    exit()
+    exit(0)
 # weights =list(csv.reader(open("weights_decideur2(economist).csv", "r"), delimiter=","))
 print('weights \n', weights)
 array_weights = np.asarray(weights[0], dtype='float')
