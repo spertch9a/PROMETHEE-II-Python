@@ -95,7 +95,7 @@ print("STEP 3 : Calculate the PREFERENCE Function")
 def changetozeros(matrix):
     for i in range(len(matrix)) :  
         for j in range(len(matrix[i])) :  
-            if matrix[i][j] <= 0 :
+            if matrix[i][j] < 0 :
                 matrix[i][j] = 0
     return matrix
 
@@ -153,7 +153,7 @@ Agregate_preference_matrix_with_sum = add_aggregated_preferences_line(Agregate_p
 print('Agregate_preference_matrix_with_sum \n', Agregate_preference_matrix_with_sum)
 aggrsums = Agregate_preference_matrix_with_sum[:,-1]
 print(aggrsums)
-# take only the aggragated sum values(LAST column) and create aggregated preference Function
+# take only the aggragated sum values(LAST column) and create aggregated preference Function(matrix)
 def create_aggregated_matrix(matrix, aggr):
     # retrieve only the aggregated column(list)
     aggregate_column = np.array(matrix[:, -1].transpose())
@@ -182,40 +182,37 @@ aggregated_matrix = np.zeros((len(Alternatives), len(Alternatives)))
 
 print("len alternatives")
 print(len(Alternatives))
-hamoud = create_aggregated_matrix(aggregated_matrix, aggrsums)
+created_aggregated_matrix = create_aggregated_matrix(aggregated_matrix, aggrsums)
 
-print("HADA HAMOUD")
-print(hamoud)
-linesha9eh = hamoud
+print("HADA created_aggregated_matrix")
+print(created_aggregated_matrix)
+duplicated = created_aggregated_matrix
 #flot entrant w sortant
-def sumColumn(m):
-    return [sum(col) for col in zip(*m)] 
+def sumColumn(matrice):
+    return [sum(col) for col in zip(*matrice)] 
 
-sommeeecolonne= sumColumn(hamoud)
+sommeeecolonne= sumColumn(created_aggregated_matrix)
 
-sumrows = np.sum(hamoud, axis = 1)
-#we need to deivde those calculated vvalues on the number of alternatives -1
+sumrows = np.sum(created_aggregated_matrix, axis = 1)
+#we need to deivde those calculated values on the number of alternatives -1
 newsommecolonne = []
 newsumrow= []
 for x in sommeeecolonne:
-    newsommecolonne.append(x /(len(hamoud) - 1))
+    newsommecolonne.append(x /(len(created_aggregated_matrix) - 1))
 
 for x in sumrows:
-    newsumrow.append(x /(len(hamoud) - 1))
-
-
-print(sommeeecolonne)
-print(sumrows)        
+    newsumrow.append(x /(len(created_aggregated_matrix) - 1))
+   
 print("flots entrants \n" , newsommecolonne)
 print("flots sortants \n" , newsumrow)
 
-hamoud = np.vstack([hamoud, newsumrow])
-print("b colmns ")
-print(hamoud)
+created_aggregated_matrix = np.vstack([created_aggregated_matrix, newsumrow])
+print("updated matrix with columns ")
+print(created_aggregated_matrix)
 
 newsommecolonne.append(0)
-hamoud= np.vstack([hamoud.transpose(), newsommecolonne]).transpose()
-print("hamoud kamel\n", hamoud)
+created_aggregated_matrix= np.vstack([created_aggregated_matrix.transpose(), newsommecolonne]).transpose()
+print("created_aggregated_matrix kamel\n", created_aggregated_matrix)
 
 
 #here i'll be using a function to calculate the flots 
@@ -225,21 +222,21 @@ def calculateflows(matrix):
         diffs.append(matrix[i,-1] - matrix[-1, i])
     return diffs
 
-print("flowshamoud")
-differencesflots = calculateflows(hamoud)
+print("flowscreated_aggregated_matrix")
+differencesflots = calculateflows(created_aggregated_matrix)
 print(differencesflots)
 
 
 alt = np.append(Alternatives, " ")
-linesha9eh = np.vstack([alt, hamoud.transpose()])
-#so far hamoud is transposed 
+duplicated = np.vstack([alt, created_aggregated_matrix.transpose()])
+#so far created_aggregated_matrix is transposed 
 
 
 # def remove_last_element(arr):
 #     return arr[np.arange(arr.size - 1)]
 # fachnhat = remove_last_element(fachnhat)
 
-talyabachtetsetef  = np.vstack([linesha9eh, differencesflots]).transpose()
+talyabachtetsetef  = np.vstack([duplicated, differencesflots]).transpose()
 print("sma3")
 
 print("##############")
