@@ -3,6 +3,7 @@ Authors Oussama FORTAS
         Aimene BAHRI
         Ali Atmani
         Abed Kebir
+        Benachenhou Linda
 """
 import sys
 import numpy
@@ -66,7 +67,7 @@ def all_alternatives(Alternatives):
     return np.array(Alternative_possibilities).reshape(len(Alternative_possibilities),1)
 Alternative_possibilities = all_alternatives(Alternatives)
 print('Alternative_possibilities \n', Alternative_possibilities)
-time.sleep(10)
+time.sleep(3)
 
 # create the matrix of all variables possibilities:
 def all_variables(matrix):
@@ -109,7 +110,7 @@ print('the_Preference_matrix \n', the_Preference_matrix)
 # calculate the aggregated preferenbce function
 # hna nedourbou f les poids(weights)
 # lets call the weights from a csv file
-weights =list(csv.reader(open("weights2.csv", "r"), delimiter=","))
+weights =list(csv.reader(open("weights_decideur2(economist).csv", "r"), delimiter=","))
 print('weights \n', weights)
 array_weights = np.asarray(weights[0], dtype='float64')
 print('array_weights \n', array_weights)
