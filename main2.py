@@ -11,7 +11,7 @@ import csv
 import numpy as np
 import time
 
-numpy.set_printoptions(threshold=sys.maxsize)
+np.set_printoptions(precision=3)
 print("PROMETHEE 2 METHOD")
 print("##################################################")
 
@@ -24,7 +24,7 @@ print('Matrice de performance',Matrix)
 print("STEP 1 : Normalize the Evaluation Matrix")
 array_Matrix  = np.array(Matrix)
 
-Alternative_matix = array_Matrix[2:,1:].astype(np.float)
+Alternative_matix = array_Matrix[2:,1:].astype(np.single)
 print('Alternative_matix \n',Alternative_matix)
 
 labels = array_Matrix[0,1:]
@@ -112,7 +112,7 @@ print('the_Preference_matrix \n', the_Preference_matrix)
 # lets call the weights from a csv file
 weights =list(csv.reader(open("weights_decideur2(economist).csv", "r"), delimiter=","))
 print('weights \n', weights)
-array_weights = np.asarray(weights[0], dtype='float64')
+array_weights = np.asarray(weights[0], dtype='float')
 print('array_weights \n', array_weights)
 
 # lets create a fucntion to mult the weights with the matrix of preferences variables
