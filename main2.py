@@ -12,6 +12,7 @@ import time
 
 numpy.set_printoptions(threshold=sys.maxsize)
 print("PROMETHEE 2 METHOD")
+
 print("##################################################")
 
 print("We will be using AHP : Analytic Hierarchy Process.")
@@ -66,7 +67,7 @@ def all_alternatives(Alternatives):
     return np.array(Alternative_possibilities).reshape(len(Alternative_possibilities),1)
 Alternative_possibilities = all_alternatives(Alternatives)
 print('Alternative_possibilities \n', Alternative_possibilities)
-time.sleep(10)
+time.sleep(3)
 
 # create the matrix of all variables possibilities:
 def all_variables(matrix):
@@ -81,14 +82,14 @@ def all_variables(matrix):
 
 variables_possibilities = all_variables(Alternative_matix)
 print('variables_possibilities \n', variables_possibilities)
-
+time.sleep(3)
 print('Alternative_possibilities shape \n', Alternative_possibilities.shape)
 print('variables_possibilities shape \n', variables_possibilities.shape)
 
 # concatenate the Names and variables related 
 the_all_matrix = np.hstack([Alternative_possibilities, variables_possibilities])
 print('The All Matrix \n', the_all_matrix)
-
+time.sleep(3)
 print("STEP 3 : Calculate the PREFERENCE Function")
 # Create an updated matrix that return 0 if value is negative or equal to 0 
 # else keep value as it it
@@ -101,7 +102,7 @@ def changetozeros(matrix):
 
 Preference_matrix = changetozeros(variables_possibilities)
 print('PREFERENCE_matrix \n', Preference_matrix)
-
+time.sleep(3)
 # concatenate the Names and preferences related 
 the_Preference_matrix = np.hstack([Alternative_possibilities, Preference_matrix])
 print('the_Preference_matrix \n', the_Preference_matrix)
@@ -109,11 +110,19 @@ print('the_Preference_matrix \n', the_Preference_matrix)
 # calculate the aggregated preferenbce function
 # hna nedourbou f les poids(weights)
 # lets call the weights from a csv file
-weights =list(csv.reader(open("weights2.csv", "r"), delimiter=","))
+if sys.argv[1] == 1:
+    weights =list(csv.reader(open("weights_decideur1(politicien).csv", "r"), delimiter=","))
+elif sys.argv[1] == 2:
+    weights =list(csv.reader(open("weights_decideur2(economist) - Sheet1.csv", "r"), delimiter=","))
+elif sys.argv[1] == 3:
+    weights =list(csv.reader(open("weights_decideur3(Représentant de l’environnement) - Sheet1.csv", "r"), delimiter=","))
+else
+    weights =list(csv.reader(open("weights_decideur4(Représentant du public) - Sheet1.csv", "r"), delimiter=","))
+
 print('weights \n', weights)
 array_weights = np.asarray(weights[0], dtype='float64')
 print('array_weights \n', array_weights)
-
+time.sleep(3)
 # lets create a fucntion to mult the weights with the matrix of preferences variables
 def mult_matrix_vect(matrix, weight):
     for i in range(len(matrix)) :  
@@ -135,7 +144,7 @@ show_calculation = show_mult_matrix_vect(Preference_matrix, array_weights)
 
 print('show_calculation \n', show_calculation)
 print('Agregate_preference_matrix \n', Agregate_preference_matrix)
-
+time.sleep(3)
 # lets add a column to sum these aggregated preferences
 def add_aggregated_preferences_line(matrix):
     average_line_weight = []
@@ -151,6 +160,7 @@ def add_aggregated_preferences_line(matrix):
 
 Agregate_preference_matrix_with_sum = add_aggregated_preferences_line(Agregate_preference_matrix)
 print('Agregate_preference_matrix_with_sum \n', Agregate_preference_matrix_with_sum)
+time.sleep(3)
 aggrsums = Agregate_preference_matrix_with_sum[:,-1]
 print(aggrsums)
 # take only the aggragated sum values(LAST column) and create aggregated preference Function(matrix)
@@ -181,11 +191,11 @@ def create_aggregated_matrix(matrix, aggr):
 aggregated_matrix = np.zeros((len(Alternatives), len(Alternatives)))
 
 print("len alternatives")
-print(len(Alternatives))
 created_aggregated_matrix = create_aggregated_matrix(aggregated_matrix, aggrsums)
 
 print("HADA created_aggregated_matrix")
 print(created_aggregated_matrix)
+time.sleep(3)
 duplicated = created_aggregated_matrix
 #flot entrant w sortant
 def sumColumn(matrice):
